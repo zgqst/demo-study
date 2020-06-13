@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100vh;
+      }
+      canvas {
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas">你的浏览器竟然不支持canvas？|赶紧换一个吧|</canvas>
+    <script>
+      /** @type {HTMLCanvasElement} */
+      var canvas = document.querySelector("#canvas");
+      var cxt = canvas.getContext("2d");
+      canvas.width = document.body.clientWidth;
+      canvas.height = document.body.clientHeight;
+      cxt.lineCap = "round"; /* 控制线的头尾 */
+      cxt.lineJoin = "round"; /* 控制线的转折 */
+      cxt.lineWidth = "1";
+      cxt.strokeStyle = "blue";
+      var flag = false;
+      var point = [];
+      canvas.onmousedown = (e) => {
+        // canvas.style.border = "1px red solid";
+        flag = true; /* 按下开始画 */
+        point = [e.clientX, e.clientY];
+        if (flag === true) {
+          cxt.beginPath();
+          cxt.moveTo(point[0], point[1]);
+          cxt.lineTo(point[0], point[1]);
+          cxt.closePath();
+          cxt.stroke();
+        }
+      };
+      canvas.onmousemove = (e) => {
+        if (flag === true) {
+          cxt.beginPath();
+          cxt.moveTo(point[0], point[1]);
+          point = [e.clientX, e.clientY];
+
+          cxt.lineTo(point[0], point[1]);
+          cxt.closePath();
+          cxt.stroke();
+        }
+      };
+      canvas.onmouseup = (e) => {
+        flag = false;
+      };
+      canvas.ontouchstart = (e) => {
+        // canvas.style.border = "1px red solid";
+        flag = true; /* 按下开始画 */
+        point = [e.touches[0].clientX, e.touches[0].clientY];
+        if (flag === true) {
+          cxt.beginPath();
+          cxt.moveTo(point[0], point[1]);
+          cxt.lineTo(point[0], point[1]);
+          cxt.closePath();
+          cxt.stroke();
+        }
+      };
+      canvas.ontouchmove = (e) => {
+        if (flag === true) {
+          cxt.beginPath();
+          cxt.moveTo(point[0], point[1]);
+          point = [e.touches[0].clientX, e.touches[0].clientY];
+          cxt.lineTo(point[0], point[1]);
+          cxt.closePath();
+          cxt.stroke();
+        }
+      };
+      canvas.ontouchend = (e) => {
+        flag = false;
+      };
+    </script>
+  </body>
+</html>
