@@ -31,57 +31,55 @@
       cxt.strokeStyle = "blue";
       var flag = false;
       var point = [];
-      canvas.onmousedown = (e) => {
-        // canvas.style.border = "1px red solid";
-        flag = true; /* 按下开始画 */
-        point = [e.clientX, e.clientY];
-        if (flag === true) {
-          cxt.beginPath();
-          cxt.moveTo(point[0], point[1]);
-          cxt.lineTo(point[0], point[1]);
-          cxt.closePath();
-          cxt.stroke();
-        }
-      };
-      canvas.onmousemove = (e) => {
-        if (flag === true) {
-          cxt.beginPath();
-          cxt.moveTo(point[0], point[1]);
+      function drawLine(x1, y1, x2, y2) {
+        cxt.beginPath();
+        cxt.moveTo(x1, y1);
+        cxt.lineTo(x2, y2);
+        cxt.closePath();
+        cxt.stroke();
+      }
+      var isTouchDevice = "ontouchstart" in document.documentElement;
+      if (isTouchDevice === false) {
+        canvas.onmousedown = (e) => {
+          // canvas.style.border = "1px red solid";
+          flag = true; /* 按下开始画 */
           point = [e.clientX, e.clientY];
-
-          cxt.lineTo(point[0], point[1]);
-          cxt.closePath();
-          cxt.stroke();
-        }
-      };
-      canvas.onmouseup = (e) => {
-        flag = false;
-      };
-      canvas.ontouchstart = (e) => {
-        // canvas.style.border = "1px red solid";
-        flag = true; /* 按下开始画 */
-        point = [e.touches[0].clientX, e.touches[0].clientY];
-        if (flag === true) {
-          cxt.beginPath();
-          cxt.moveTo(point[0], point[1]);
-          cxt.lineTo(point[0], point[1]);
-          cxt.closePath();
-          cxt.stroke();
-        }
-      };
-      canvas.ontouchmove = (e) => {
-        if (flag === true) {
-          cxt.beginPath();
-          cxt.moveTo(point[0], point[1]);
+          if (flag === true) {
+            drawLine(point[0], point[1], point[0], point[1]);
+          }
+        };
+        canvas.onmousemove = (e) => {
+          if (flag === true) {
+            drawLine(point[0], point[1], e.clientX, e.clientY);
+            point = [e.clientX, e.clientY];
+          }
+        };
+        canvas.onmouseup = (e) => {
+          flag = false;
+        };
+      } else {
+        canvas.ontouchstart = (e) => {
+          flag = true; /* 按下开始画 */
           point = [e.touches[0].clientX, e.touches[0].clientY];
-          cxt.lineTo(point[0], point[1]);
-          cxt.closePath();
-          cxt.stroke();
-        }
-      };
-      canvas.ontouchend = (e) => {
-        flag = false;
-      };
+          if (flag === true) {
+            drawLine(point[0], point[1], point[0], point[1]);
+          }
+        };
+        canvas.ontouchmove = (e) => {
+          if (flag === true) {
+            drawLine(
+              point[0],
+              point[1],
+              e.touches[0].clientX,
+              e.touches[0].clientY
+            );
+            point = [e.touches[0].clientX, e.touches[0].clientY];
+          }
+        };
+        canvas.ontouchend = (e) => {
+          flag = false;
+        };
+      }
     </script>
   </body>
 </html>
